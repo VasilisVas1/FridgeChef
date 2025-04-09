@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/recipe_book_background"
+    tools:context=".RecipeDetailsActivity">
+
+    <!-- Toolbar styled to look like a recipe book header -->
+    <androidx.appcompat.widget.Toolbar
+        app:title="Recipe Details"
+        app:titleTextColor="@color/dark_brown"
+        android:background="@color/cream"
+        android:elevation="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+
+    <ScrollView
+        android:id="@+id/recipe_details_for_share"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/page_background">
+
+            <!-- Recipe Name with elegant font -->
+            <TextView
+                android:id="@+id/textView_meal_name"
+                android:text="Recipe Name"
+                android:textSize="28sp"
+                android:textColor="@color/dark_brown"
+                android:gravity="center"
+                android:padding="16dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cormorantgaramond"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <!-- Recipe Image with rounded corners -->
+            <ImageView
+                android:id="@+id/imageView_meal_image"
+                android:layout_margin="16dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/image_border"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"/>
+
+            <!-- Instructions Section -->
+            <TextView
+                android:text="Instructions"
+                android:textSize="38sp"
+                android:gravity="center"
+                android:textColor="@color/dark_brown"
+                android:padding="8dp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cormorantgaramond"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_meal_instructions"
+                android:layout_margin="8dp"
+                android:background="@drawable/content_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/button_cooking_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:padding="12dp"
+                android:text="Cooking Mode"
+                android:textSize="18sp"
+                android:textColor="@color/cream"
+                android:fontFamily="@font/cormorantgaramond"
+                android:background="@drawable/rounded_button"
+                app:backgroundTint="@null"
+                android:elevation="2dp"/>
+
+
+            <!-- Ingredients Section -->
+            <TextView
+                android:text="Ingredients"
+                android:textStyle="bold"
+                android:textColor="@color/dark_brown"
+                android:textSize="38sp"
+                android:padding="8dp"
+                android:gravity="center"
+                android:fontFamily="@font/cormorantgaramond"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_meal_ingredients"
+                android:layout_margin="8dp"
+                android:background="@drawable/content_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/button_share_recipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:padding="12dp"
+                android:text="Share Recipe"
+                android:textSize="18sp"
+                android:textColor="@color/cream"
+                android:fontFamily="@font/cormorantgaramond"
+                android:background="@drawable/rounded_button"
+                app:backgroundTint="@null"
+                android:elevation="2dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

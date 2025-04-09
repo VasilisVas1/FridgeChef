@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/activity_pantry"
+    android:background="@color/cream_dark"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView_pantryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/dark_brown"
+        android:text="Your Pantry"
+        android:fontFamily="@font/cormorantgaramond"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_gravity="center" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_pantry"
+        android:layout_width="match_parent"
+        android:background="@drawable/content_background"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <AutoCompleteTextView
+        android:id="@+id/editText_ingredient"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Enter ingredient"
+        android:inputType="text"
+        android:background="@drawable/input_background"
+        android:fontFamily="@font/cormorantgaramond"
+        android:textColor="@color/dark_brown"
+        android:textColorHint="@color/black"
+        android:textSize="20sp"/>
+
+    <!-- Add Spinner for units -->
+    <Spinner
+        android:id="@+id/spinner_unit"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/input_background"
+        android:textColor="@color/dark_brown"
+        android:spinnerMode="dropdown"/>
+
+    <EditText
+        android:id="@+id/editText_quantity"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Enter quantity"
+        android:inputType="number"
+        android:background="@drawable/input_background"
+        android:fontFamily="@font/cormorantgaramond"
+        android:textColor="@color/dark_brown"
+        android:textColorHint="@color/black"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/button_addIngredient"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/cream"
+        android:fontFamily="@font/cormorantgaramond"
+        android:background="@drawable/rounded_button"
+        app:backgroundTint="@null"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:text="Add Ingredient" />
+
+    <Button
+        android:id="@+id/button_open_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/cream"
+        android:fontFamily="@font/cormorantgaramond"
+        android:background="@drawable/rounded_button"
+        app:backgroundTint="@null"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:text="Take Picture Of Ingredient"/>
+
+
+</LinearLayout>

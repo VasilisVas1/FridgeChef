@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="orange">#FF5722</color>
+    <color name="lavender_Gray">#c4c3d0</color>
+    <color name="cream">#FAF3E0</color>
+    <color name="cream_dark">#FDEAC5</color>
+
+    <color name="dark_brown">#6B4226</color>
+
+
+
+    <!-- Primary Colors -->
+    <color name="primary">#6200EE</color>
+    <color name="primaryDark">#3700B3</color>
+    <color name="primaryLight">#BB86FC</color>
+
+    <!-- Background Colors -->
+    <color name="backgroundLight">#F5F5F5</color>
+
+</resources>

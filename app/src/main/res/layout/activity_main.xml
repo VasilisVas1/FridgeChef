@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/cream_dark"
+    tools:context=".MainActivity">
+   <androidx.appcompat.widget.Toolbar
+       android:layout_width="match_parent"
+       android:layout_height="?attr/actionBarSize">
+      <RelativeLayout
+          android:gravity="center_vertical"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+         <TextView
+             android:text="FridgeChef"
+             android:fontFamily="@font/cormorantgaramond"
+             android:textSize="25sp"
+             android:gravity="center"
+             android:textStyle="bold"
+             android:textColor="@color/dark_brown"
+             android:layout_alignParentStart="true"
+             android:layout_marginStart="8dp"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"/>
+
+         <TextView
+             android:id="@+id/pantry_textview"
+             android:text="Pantry"
+             android:fontFamily="@font/cormorantgaramond"
+             android:textSize="25sp"
+             android:textStyle="bold"
+             android:textColor="@color/dark_brown"
+             android:layout_alignParentEnd="true"
+             android:layout_marginTop="20dp"
+             android:layout_marginEnd="8dp"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"/>
+
+         <!--
+         <Spinner
+             android:id="@+id/spinner_tags"
+             android:gravity="center"
+             android:layout_alignParentEnd="true"
+             android:entries="@array/tags"
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"/>
+             -->
+
+      </RelativeLayout>
+   </androidx.appcompat.widget.Toolbar>
+   <!--
+   <androidx.cardview.widget.CardView
+       app:cardElevation="8dp"
+       app:cardBackgroundColor="@color/white"
+       android:layout_margin="8dp"
+       android:layout_width="match_parent"
+       android:layout_height="?attr/actionBarSize">
+
+      <androidx.appcompat.widget.SearchView
+          android:id="@+id/searchView_home"
+          app:queryHint="Search your recipe..."
+          app:iconifiedByDefault="false"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+   </androidx.cardview.widget.CardView>
+    -->
+
+
+   <!--
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/recycler_random"
+       android:layout_margin="4dp"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:layout_weight="1"/>
+       -->
+   <TextView
+       android:id="@+id/welcome_textview"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="Welcome! Are you ready to cook? 🍳"
+       android:textSize="24sp"
+       android:textStyle="bold"
+       android:padding="16dp"
+       android:gravity="center"
+       android:textColor="@color/dark_brown"/>
+
+
+   <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/recycler_recipeByIngredients"
+       android:layout_margin="4dp"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent" />
+
+</LinearLayout>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "138000809574",
+    "project_id": "fridgechef-e6fad",
+    "storage_bucket": "fridgechef-e6fad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138000809574:android:368ace14fa3655713577a7",
+        "android_client_info": {
+          "package_name": "com.example.vassilis88.fridgechef"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD74qlI8scEGgT974XuqJhOQD62Ti2tb7o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

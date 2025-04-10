@@ -17,9 +17,6 @@ FridgeChef is an Android app that recommends recipes based on the ingredients yo
 - **Logmeal API**: Used for ingredient image recognition through the user’s camera.
 - **Firebase**: Used for database storage of user data, including their pantry ingredients.
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
 

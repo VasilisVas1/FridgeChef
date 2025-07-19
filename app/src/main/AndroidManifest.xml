@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-feature android:name="android.permission.CAMERA" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,10 +20,24 @@
         android:theme="@style/Theme.FridgeChef"
         tools:targetApi="31">
         <activity
+            android:name=".NutritionAnalysisActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
+            android:name=".CookingBookActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
+            android:name=".StatisticsActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
             android:name=".PantryActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".SignIn_UpActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,16 +47,16 @@
         </activity>
         <activity
             android:name=".CookingModeActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".RecipeDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
-
-
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -49,9 +65,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
-
     </application>
 
 </manifest>

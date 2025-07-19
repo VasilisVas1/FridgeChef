@@ -5,11 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.vassilis88.fridgechef.R;
-
 import java.util.List;
 
 public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryViewHolder> {
@@ -54,9 +51,7 @@ public class PantryAdapter extends RecyclerView.Adapter<PantryAdapter.PantryView
     }
 
     public static class PantryViewHolder extends RecyclerView.ViewHolder {
-
         TextView nameTextView;
-
         public PantryViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.textView_ingredientName);

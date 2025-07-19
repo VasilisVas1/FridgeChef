@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="PopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textColor">@color/dark_brown</item>
+        <item name="android:background">@drawable/pop_menu_bg</item>
+        <item name="android:popupBackground">@color/cream_dark</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:elevation">0dp</item>
+
+        <item name="android:divider">@drawable/menu_divider</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+</resources>

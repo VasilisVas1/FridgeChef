@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/savedRecipes_list_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="24dp"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="8dp"
+    android:backgroundTint="@color/cream_dark2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/welcome_card_gradient"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_header_background"
+            android:padding="20dp">
+
+            <!-- Dish Title with Modern Typography -->
+            <TextView
+                android:id="@+id/textView_titleSavedRecipe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dish Name"
+                android:textSize="24sp"
+                android:textColor="@color/dark_brown"
+                android:fontFamily="@font/cormorantgaramond"
+                android:textStyle="bold"
+                android:letterSpacing="0.02"
+                android:lineSpacingExtra="2dp"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:scrollHorizontally="true"
+                android:shadowColor="#40000000"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="2" />
+
+        </RelativeLayout>
+
+        <!-- Dish Image -->
+        <ImageView
+            android:id="@+id/imageView_savedRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="12dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/modern_input_background" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -10,10 +10,7 @@ import com.example.vassilis88.fridgechef.Models.AutocompleteIngredients;
 import com.example.vassilis88.fridgechef.Models.InstructionsResponse;
 import com.example.vassilis88.fridgechef.Models.RecipeDetailsResponse;
 import com.example.vassilis88.fridgechef.Models.RecipesByIngredientsResponse;
-
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,9 +42,7 @@ public class RequestManager {
                     return;
                 }
                 listener.didFetch(response.body(),response.message());
-
             }
-
             @Override
             public void onFailure(Call<RecipeDetailsResponse> call, Throwable throwable) {
                 listener.didError(throwable.getMessage());
@@ -66,9 +61,7 @@ public class RequestManager {
                     return;
                 }
                 listener.didFetch(response.body(), response.message());
-
             }
-
             @Override
             public void onFailure(Call<List<InstructionsResponse>> call, Throwable throwable) {
                 listener.didError(throwable.getMessage());
@@ -76,7 +69,6 @@ public class RequestManager {
             }
         });
     }
-
     public void getRecipesByIngredients(RecipeByIngredientsResponseListener listener, String ingredients){
         CallRecipesByIngredients callRecipesByIngredients = retrofit.create(CallRecipesByIngredients.class);
         Call<List<RecipesByIngredientsResponse>> call = callRecipesByIngredients.callRecipeByIngredients(
@@ -92,7 +84,6 @@ public class RequestManager {
                 }
                 listener.didFetch(response.body(), response.message());
             }
-
             @Override
             public void onFailure(Call<List<RecipesByIngredientsResponse>> call, Throwable throwable) {
                 listener.didError(throwable.getMessage());
@@ -109,7 +100,6 @@ public class RequestManager {
                 true,
                 BuildConfig.SPOONACULAR_API_KEY
         );
-
         call.enqueue(new Callback<List<AutocompleteIngredients>>() {
             @Override
             public void onResponse(Call<List<AutocompleteIngredients>> call, Response<List<AutocompleteIngredients>> response) {
@@ -119,7 +109,6 @@ public class RequestManager {
                 }
                 listener.didFetch(response.body(), response.message());
             }
-
             @Override
             public void onFailure(Call<List<AutocompleteIngredients>> call, Throwable throwable) {
                 listener.didError(throwable.getMessage());
@@ -134,7 +123,6 @@ public class RequestManager {
                 @Query("apiKey") String apiKey
         );
     }
-
     private interface CallInstructions{
         @GET("recipes/{id}/analyzedInstructions")
         Call<List<InstructionsResponse>> callInstructions(
@@ -152,7 +140,6 @@ public class RequestManager {
                 @Query("apiKey") String apiKey
         );
     }
-
     private interface CallAutoCompleteIngredients{
         @GET("food/ingredients/autocomplete")
         Call<List<AutocompleteIngredients>> callAutocompleteIngredients(

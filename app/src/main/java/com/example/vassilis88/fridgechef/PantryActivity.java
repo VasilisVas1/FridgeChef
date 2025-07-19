@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,21 +37,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-
-
 
 public class PantryActivity extends AppCompatActivity implements AutocompleteIngredientsResponseListener{
 
@@ -63,16 +61,15 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
     private Spinner unitSpinner;
     private ArrayAdapter<String> unitAdapter;
     private List<AutocompleteIngredients> currentSuggestions;
-
     private static final int CAMERA_REQUEST_CODE = 100;
-    private static final String LOGMEAL_API_KEY = BuildConfig.LOGMEAL_API_KEY;
-
-
+    private static final String OPENROUTER_API_KEY = BuildConfig.OPENROUTER_API_KEY;
+    private AlertDialog loadingDialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_pantry);
 
         auth = FirebaseAuth.getInstance();
@@ -98,12 +95,10 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
 
         recyclerView.setAdapter(pantryAdapter);
 
-
         loadIngredients();
 
         findViewById(R.id.button_addIngredient).setOnClickListener(v -> addIngredient());
         findViewById(R.id.button_open_camera).setOnClickListener(v -> openCamera());
-
     }
 
     private void openCamera() {
@@ -120,57 +115,60 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
-            Bitmap resizedPhoto = resizeAndConvertToGrayscale(photo);
-            uploadImageToLogMeal(resizedPhoto);
+            analyzeImageWithOpenRouter(photo);
         }
     }
 
-    private Bitmap resizeAndConvertToGrayscale(Bitmap original) {
-        Bitmap resized = Bitmap.createScaledBitmap(original, 512, 512, true);
-
-        Bitmap grayscale = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888);
-        for (int x = 0; x < 512; x++) {
-            for (int y = 0; y < 512; y++) {
-                int pixel = resized.getPixel(x, y);
-                int red = (pixel >> 16) & 0xFF;
-                int green = (pixel >> 8) & 0xFF;
-                int blue = pixel & 0xFF;
-
-                int gray = (int) (0.3 * red + 0.59 * green + 0.11 * blue);
-                int grayPixel = (0xFF << 24) | (gray << 16) | (gray << 8) | gray;
-
-                grayscale.setPixel(x, y, grayPixel);
-            }
-        }
-        return grayscale;
-    }
-
-
-
-    private void uploadImageToLogMeal(Bitmap photo) {
+    private void analyzeImageWithOpenRouter(Bitmap photo) {
         showLoadingDialog();
         new Thread(() -> {
             try {
-                String url = "https://api.logmeal.com/v2/image/segmentation/complete";
-                URL serverUrl = new URL(url);
-                HttpURLConnection connection = (HttpURLConnection) serverUrl.openConnection();
+                String base64Image = bitmapToBase64(photo);
+
+                JSONObject requestBody = new JSONObject();
+                requestBody.put("model", "openai/gpt-4o-mini");
+
+                JSONArray messages = new JSONArray();
+                JSONObject systemMessage = new JSONObject();
+                systemMessage.put("role", "system");
+                systemMessage.put("content", "You are an expert at identifying single food ingredients from images. The user will show you a photo of ONE ingredient. Identify what that single ingredient is and respond with ONLY the ingredient name. No descriptions, no extra text, just the name of the ingredient (e.g., 'Tomato', 'Onion', 'Chicken breast').");
+                messages.put(systemMessage);
+
+                JSONObject userMessage = new JSONObject();
+                userMessage.put("role", "user");
+
+                JSONArray content = new JSONArray();
+
+                JSONObject textContent = new JSONObject();
+                textContent.put("type", "text");
+                textContent.put("text", "What single ingredient is shown in this image? Respond with only the ingredient name.");
+                content.put(textContent);
+
+                JSONObject imageContent = new JSONObject();
+                imageContent.put("type", "image_url");
+                JSONObject imageUrl = new JSONObject();
+                imageUrl.put("url", "data:image/jpeg;base64," + base64Image);
+                imageContent.put("image_url", imageUrl);
+                content.put(imageContent);
+
+                userMessage.put("content", content);
+                messages.put(userMessage);
+
+                requestBody.put("messages", messages);
+                requestBody.put("max_tokens", 50);
+                requestBody.put("temperature", 0.0);
+
+                URL url = new URL("https://openrouter.ai/api/v1/chat/completions");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
+                connection.setRequestProperty("Authorization", "Bearer " + OPENROUTER_API_KEY);
+                connection.setRequestProperty("Content-Type", "application/json");
                 connection.setDoOutput(true);
-                connection.setRequestProperty("Authorization", "Bearer " + LOGMEAL_API_KEY);
-                connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=----WebKitFormBoundary");
 
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                photo.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                byte[] imageBytes = outputStream.toByteArray();
-
-                DataOutputStream requestBody = new DataOutputStream(connection.getOutputStream());
-                requestBody.writeBytes("------WebKitFormBoundary\r\n");
-                requestBody.writeBytes("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n");
-                requestBody.writeBytes("Content-Type: image/jpeg\r\n\r\n");
-                requestBody.write(imageBytes);
-                requestBody.writeBytes("\r\n------WebKitFormBoundary--\r\n");
-                requestBody.flush();
-                requestBody.close();
+                OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+                writer.write(requestBody.toString());
+                writer.flush();
+                writer.close();
 
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -181,46 +179,112 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
                         response.append(line);
                     }
                     reader.close();
-
-                    runOnUiThread(() -> handleApiResponse(response.toString()));
-                } else {
-                    Log.e("API Error", "Response Code: " + responseCode);
-                }
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        response.append(line);
-                    }
-                    reader.close();
-
                     runOnUiThread(() -> {
                         hideLoadingDialog();
-                        handleApiResponse(response.toString());
+                        handleOpenRouterResponse(response.toString());
                     });
                 } else {
-                    Log.e("API Error", "Response Code: " + responseCode);
-                    runOnUiThread(this::hideLoadingDialog);
+                    BufferedReader errorReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+                    StringBuilder errorResponse = new StringBuilder();
+                    String errorLine;
+                    while ((errorLine = errorReader.readLine()) != null) {
+                        errorResponse.append(errorLine);
+                    }
+                    errorReader.close();
+                    Log.e("OpenRouter Error", "Response Code: " + responseCode + ", Error: " + errorResponse.toString());
+                    runOnUiThread(() -> {
+                        hideLoadingDialog();
+                        Toast.makeText(this, "Failed to analyze image. Please try again.", Toast.LENGTH_SHORT).show();
+                    });
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                runOnUiThread(this::hideLoadingDialog);
-
+                Log.e("OpenRouter Error", "Exception: " + e.getMessage());
+                runOnUiThread(() -> {
+                    hideLoadingDialog();
+                    Toast.makeText(this, "Error analyzing image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
             }
         }).start();
     }
 
-    private AlertDialog loadingDialog;
+    private String bitmapToBase64(Bitmap bitmap) {
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 512, 512, true);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    private void handleOpenRouterResponse(String response) {
+        try {
+            JSONObject jsonResponse = new JSONObject(response);
+            JSONArray choices = jsonResponse.optJSONArray("choices");
+            if (choices != null && choices.length() > 0) {
+                JSONObject firstChoice = choices.getJSONObject(0);
+                JSONObject message = firstChoice.optJSONObject("message");
+
+                if (message != null) {
+                    String content = message.optString("content", "").trim();
+
+                    if (!content.isEmpty()) {
+                        String ingredientName = cleanIngredientName(content);
+
+                        if (!ingredientName.isEmpty()) {
+                            ingredientInput.requestFocus();
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.showSoftInput(ingredientInput, InputMethodManager.SHOW_IMPLICIT);
+
+                            typeWriterEffect(ingredientInput, ingredientName, 100);
+                        } else {
+                            ingredientInput.setText("No ingredient recognized");
+                        }
+                    } else {
+                        ingredientInput.setText("No ingredient recognized");
+                    }
+                } else {
+                    Log.e("JSON Error", "Message field missing in response.");
+                    ingredientInput.setText("Error parsing response");
+                }
+            } else {
+                Log.e("JSON Error", "Choices field missing or empty in response.");
+                ingredientInput.setText("No ingredient recognized");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("JSON Error", "Failed to parse JSON: " + e.getMessage());
+            ingredientInput.setText("Error parsing response");
+        }
+    }
+
+    private String cleanIngredientName(String ingredient) {
+        ingredient = ingredient.replaceAll("(?i)^(the |a |an |some |fresh |raw |cooked |diced |sliced |chopped |whole |single )", "");
+        ingredient = ingredient.replaceAll("(?i)(\\s+\\(.*\\)|\\s*-.*|\\s*,.*|\\s*\\.|\\s*!)", "");
+        ingredient = ingredient.replaceAll("(?i)\\s+(is|in|the|image|photo|picture).*", "");
+        ingredient = ingredient.trim();
+        if (ingredient.toLowerCase().endsWith("es") && ingredient.length() > 3) {
+            if (ingredient.toLowerCase().endsWith("oes")) {
+                ingredient = ingredient.substring(0, ingredient.length() - 2);
+            } else if (ingredient.toLowerCase().endsWith("ies")) {
+                ingredient = ingredient.substring(0, ingredient.length() - 3) + "y";
+            }
+        } else if (ingredient.toLowerCase().endsWith("s") && ingredient.length() > 3 &&
+                !ingredient.toLowerCase().endsWith("ss")) {
+            ingredient = ingredient.substring(0, ingredient.length() - 1);
+        }
+        if (!ingredient.isEmpty()) {
+            ingredient = ingredient.substring(0, 1).toUpperCase() + ingredient.substring(1).toLowerCase();
+        }
+
+        return ingredient;
+    }
 
     private void showLoadingDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-
         View view = getLayoutInflater().inflate(R.layout.dialog_loading, null);
         builder.setView(view);
-
         loadingDialog = builder.create();
         loadingDialog.show();
     }
@@ -228,57 +292,6 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
     private void hideLoadingDialog() {
         if (loadingDialog != null && loadingDialog.isShowing()) {
             loadingDialog.dismiss();
-        }
-    }
-
-
-    private void handleApiResponse(String response) {
-        try {
-            JSONObject jsonResponse = new JSONObject(response);
-            JSONArray segmentationResults = jsonResponse.optJSONArray("segmentation_results");
-
-            if (segmentationResults != null && segmentationResults.length() > 0) {
-                JSONObject firstSegment = segmentationResults.getJSONObject(0);
-                JSONArray recognitionResults = firstSegment.optJSONArray("recognition_results");
-
-                if (recognitionResults != null && recognitionResults.length() > 0) {
-                    String bestIngredient = null;
-                    double maxProb = 0.0;
-
-                    // Find ingredient with the highest probability
-                    for (int i = 0; i < recognitionResults.length(); i++) {
-                        JSONObject ingredient = recognitionResults.getJSONObject(i);
-                        double prob = ingredient.optDouble("prob", 0.0);
-                        if (prob > maxProb) {
-                            maxProb = prob;
-                            bestIngredient = ingredient.optString("name");
-                        }
-                    }
-
-                    if (bestIngredient != null) {
-                        ingredientInput.requestFocus();
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.showSoftInput(ingredientInput, InputMethodManager.SHOW_IMPLICIT);
-
-                        typeWriterEffect(ingredientInput, bestIngredient, 300);
-                        //ingredientInput.setText(bestIngredient);
-
-                    } else {
-                        ingredientInput.setText("No ingredient recognized");
-                    }
-                } else {
-                    Log.e("JSON Error", "'recognition_results' field missing or empty.");
-                    ingredientInput.setText("No ingredient recognized");
-                }
-            } else {
-                Log.e("JSON Error", "'segmentation_results' field missing or empty.");
-                ingredientInput.setText("No ingredient recognized");
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("JSON Error", "Failed to parse JSON: " + e.getMessage());
-            ingredientInput.setText("Error parsing response");
         }
     }
 
@@ -294,7 +307,6 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
             }, delay * i);
         }
     }
-
 
     private void setupIngredientAutocomplete() {
         ingredientInput.setThreshold(1);
@@ -314,7 +326,6 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
                             .getAutoCompleteIngredients(PantryActivity.this, s.toString());
                 }
             }
-
             @Override
             public void afterTextChanged(Editable s) {}
         });
@@ -333,7 +344,6 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
         unitAdapter.notifyDataSetChanged();
     }
 
-
     @Override
     public void didFetch(List<AutocompleteIngredients> response, String message) {
         currentSuggestions = response;
@@ -341,7 +351,6 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
         for (AutocompleteIngredients ingredient : response) {
             suggestions.add(ingredient.name);
         }
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, suggestions);
         ingredientInput.setAdapter(adapter);
     }
@@ -363,18 +372,16 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
                             if (ingredientData != null) {
                                 String ingredient = ingredientData.get("name");
                                 String quantity = ingredientData.get("quantity");
-                                String unit = ingredientData.get("unit"); // Retrieve unit
+                                String unit = ingredientData.get("unit");
 
                                 if (unit == null) {
                                     unit = "";
                                 }
-
                                 ingredientList.add(ingredient + " - " + quantity + " " + unit);
                             }
                         }
                         pantryAdapter.notifyDataSetChanged();
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(PantryActivity.this, "Failed to load ingredients.", Toast.LENGTH_SHORT).show();
@@ -383,17 +390,17 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
     }
 
     private void showDeleteConfirmationDialog(String selectedItem, int position) {
+        String ingredientName = selectedItem.split(" - ")[0].trim();
+
         new androidx.appcompat.app.AlertDialog.Builder(PantryActivity.this)
                 .setTitle("Remove Ingredient")
-                .setMessage("Do you want to remove this ingredient from your pantry?")
+                .setMessage("Do you want to remove '" + ingredientName + "' from your pantry?")
                 .setPositiveButton("Yes", (dialog, which) -> {
                     deleteIngredientFromDatabase(selectedItem, position);
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
-
-
 
     private void deleteIngredientFromDatabase(String selectedItem, int position) {
         String userId = auth.getCurrentUser().getUid();
@@ -407,12 +414,10 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             snapshot.getRef().removeValue();
                         }
-
                         ingredientList.remove(selectedItem);
-                        pantryAdapter.notifyDataSetChanged(); // Full refresh is safer in this case
+                        pantryAdapter.notifyDataSetChanged();
                         Toast.makeText(PantryActivity.this, "Ingredient removed.", Toast.LENGTH_SHORT).show();
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(PantryActivity.this, "Failed to remove ingredient.", Toast.LENGTH_SHORT).show();
@@ -423,38 +428,75 @@ public class PantryActivity extends AppCompatActivity implements AutocompleteIng
     private void addIngredient() {
         String ingredientName = ingredientInput.getText().toString().trim();
         String quantity = quantityInput.getText().toString().trim();
-
         if (unitSpinner.getSelectedItem() == null) {
             Toast.makeText(this, "Please select a unit.", Toast.LENGTH_SHORT).show();
             return;
         }
-
         String unit = unitSpinner.getSelectedItem().toString();
-
         if (ingredientName.isEmpty() || quantity.isEmpty() || unit.isEmpty()) {
             Toast.makeText(this, "Please enter both ingredient and quantity.", Toast.LENGTH_SHORT).show();
             return;
         }
         String userId = auth.getCurrentUser().getUid();
-
-        Map<String, String> ingredientData = Map.of(
-                "name", ingredientName,
-                "quantity", quantity,
-                "unit", unit
-
-        );
-
-        database.child("users").child(userId).child("pantry").push().setValue(ingredientData)
-                .addOnSuccessListener(aVoid -> {
-                    ingredientInput.setText("");
-                    quantityInput.setText("");
-                    unitAdapter.clear();
-                    unitAdapter.notifyDataSetChanged();
-                    loadIngredients();
-                    Toast.makeText(PantryActivity.this, "Ingredient added!", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(PantryActivity.this, "Failed to add ingredient.", Toast.LENGTH_SHORT).show();
+        database.child("users").child(userId).child("pantry")
+                .orderByChild("name").equalTo(ingredientName)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            String existingKey = dataSnapshot.getChildren().iterator().next().getKey();
+                            showReplaceIngredientDialog(ingredientName, quantity, unit, existingKey);
+                        } else {
+                            Map<String, String> ingredientData = Map.of(
+                                    "name", ingredientName,
+                                    "quantity", quantity,
+                                    "unit", unit
+                            );
+                            database.child("users").child(userId).child("pantry").push().setValue(ingredientData)
+                                    .addOnSuccessListener(aVoid -> {
+                                        ingredientInput.setText("");
+                                        quantityInput.setText("");
+                                        unitAdapter.clear();
+                                        unitAdapter.notifyDataSetChanged();
+                                        loadIngredients();
+                                        Toast.makeText(PantryActivity.this, "Ingredient added!", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(PantryActivity.this, "Failed to add ingredient.", Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(PantryActivity.this, "Failed to check existing ingredients.", Toast.LENGTH_SHORT).show();
+                    }
                 });
+    }
+    private void showReplaceIngredientDialog(String ingredientName, String quantity, String unit, String existingKey) {
+        new androidx.appcompat.app.AlertDialog.Builder(PantryActivity.this)
+                .setTitle("Ingredient Already Exists")
+                .setMessage("'" + ingredientName + "' is already in your pantry. Do you want to replace it with the new quantity?")
+                .setPositiveButton("Replace", (dialog, which) -> {
+                    String userId = auth.getCurrentUser().getUid();
+                    Map<String, String> ingredientData = Map.of(
+                            "name", ingredientName,
+                            "quantity", quantity,
+                            "unit", unit
+                    );
+                    database.child("users").child(userId).child("pantry").child(existingKey).setValue(ingredientData)
+                            .addOnSuccessListener(aVoid -> {
+                                ingredientInput.setText("");
+                                quantityInput.setText("");
+                                unitAdapter.clear();
+                                unitAdapter.notifyDataSetChanged();
+                                loadIngredients();
+                                Toast.makeText(PantryActivity.this, "Ingredient updated!", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(PantryActivity.this, "Failed to update ingredient.", Toast.LENGTH_SHORT).show();
+                            });
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 }

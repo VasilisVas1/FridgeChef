@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <TextView
+        android:id="@+id/textView_ingredientNameStats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ingredient"
+        android:textStyle="bold"
+        android:fontFamily="@font/cormorantgaramond"
+        android:textColor="@color/dark_brown"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/textView_ingredientcountStats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Count"
+        android:textStyle="bold"
+        android:fontFamily="@font/cormorantgaramond"
+        android:textColor="@color/dark_brown"
+        android:textSize="20sp" />
+</LinearLayout>

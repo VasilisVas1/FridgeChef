@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vassilis88.fridgechef.Adapters.CookingModeAdapter;
-import com.example.vassilis88.fridgechef.Adapters.InstructionsAdapter;
 import com.example.vassilis88.fridgechef.Listenerts.InstructionsListener;
 import com.example.vassilis88.fridgechef.Models.InstructionsResponse;
 

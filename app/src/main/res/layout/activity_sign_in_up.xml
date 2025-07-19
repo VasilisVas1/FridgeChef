@@ -1,104 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/recipe_book_background"
+    android:background="@drawable/gradient_background"
     tools:context=".SignIn_UpActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        app:title="Welcome to FridgeChef 🧑‍🍳"
-        app:titleTextColor="@color/dark_brown"
-        android:background="@color/cream"
-        android:elevation="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+    <!-- Floating Background Elements with Animations -->
+    <View
+        android:id="@+id/floating_circle_1"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:background="@drawable/floating_circle_1"
+        android:alpha="0.3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="60dp"
+        android:layout_marginStart="30dp"
+        android:tag="float_up_down" />
+
+    <View
+        android:id="@+id/floating_circle_2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/floating_circle_2"
+        android:alpha="0.25"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="10dp"
+        android:tag="float_rotation" />
+
+    <View
+        android:id="@+id/floating_circle_3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/floating_circle_3"
+        android:alpha="0.2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="100dp"
+        android:layout_marginStart="5dp"
+        android:tag="float_side_to_side" />
+
+    <!-- Additional small floating circles -->
+    <View
+        android:id="@+id/floating_circle_4"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/floating_circle_2"
+        android:alpha="0.15"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="300dp"
+        android:layout_marginStart="10dp"
+        android:tag="float_pulse" />
+
+    <View
+        android:id="@+id/floating_circle_5"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/floating_circle_3"
+        android:alpha="0.2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="200dp"
+        android:layout_marginEnd="20dp"
+        android:tag="float_diagonal" />
+
+    <!-- Main Title with Shadow -->
+    <TextView
+        android:id="@+id/signin_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to FridgeChef 🧑‍🍳"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:textColor="@color/dark_brown"
+        android:fontFamily="@font/cormorantgaramond"
+        android:shadowColor="@android:color/black"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="48dp" />
+
+    <!-- Modern Card Container with Elevation -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/signin_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="16dp"
+        android:backgroundTint="@android:color/white"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintTop_toBottomOf="@id/signin_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Inner gradient overlay -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/card_gradient_overlay"
+            android:alpha="0.05" />
+
         <LinearLayout
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/page_background">
+            android:padding="32dp"
+            android:orientation="vertical">
 
+            <!-- Title with gradient-like effect -->
             <TextView
                 android:id="@+id/textviewTitle_sign_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:textStyle="bold"
                 android:text="Create your FridgeChef account"
                 android:textSize="20sp"
                 android:textColor="@color/dark_brown"
-                android:fontFamily="@font/cormorantgaramond" />
-
-            <EditText
-                android:id="@+id/input_full_name"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="Full Name"
-                android:padding="12dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/input_background"
                 android:fontFamily="@font/cormorantgaramond"
-                android:textColor="@color/dark_brown"
-                android:textColorHint="@color/black"
-                android:textSize="16sp" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="24dp"
+                android:shadowColor="@color/dark_brown"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2" />
 
-            <EditText
-                android:id="@+id/input_email"
+            <!-- Modern Input Fields with Material Design -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_input_layout"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="Email"
-                android:padding="12dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/input_background"
-                android:fontFamily="@font/cormorantgaramond"
-                android:textColor="@color/dark_brown"
-                android:textSize="16sp"
-                android:textColorHint="@color/black"
-                android:inputType="textEmailAddress" />
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/dark_brown"
+                app:hintTextColor="@color/dark_brown">
 
-            <EditText
-                android:id="@+id/input_password"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_full_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Full Name"
+                    android:textColor="@color/black"
+                    android:inputType="textPersonName"
+                    android:fontFamily="@font/cormorantgaramond"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email_input_layout"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="Password"
-                android:padding="12dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/input_background"
-                android:fontFamily="@font/cormorantgaramond"
-                android:textColor="@color/dark_brown"
-                android:textSize="16sp"
-                android:textColorHint="@color/black"
-                android:inputType="textPassword" />
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/dark_brown"
+                app:hintTextColor="@color/dark_brown">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    android:textColor="@color/black"
+                    android:inputType="textEmailAddress"
+                    android:fontFamily="@font/cormorantgaramond"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/dark_brown"
+                app:hintTextColor="@color/dark_brown"
+                app:passwordToggleEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Password"
+                    android:textColor="@color/black"
+                    android:inputType="textPassword"
+                    android:fontFamily="@font/cormorantgaramond"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <Button
                 android:id="@+id/button_submit_sign_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:padding="12dp"
+                android:stateListAnimator="@animator/button_elevation"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:textStyle="bold"
                 android:text="Sign Up"
-                android:textSize="18sp"
                 android:textColor="@color/cream"
+                android:textSize="20sp"
                 android:fontFamily="@font/cormorantgaramond"
-                android:background="@drawable/rounded_button"
-                app:backgroundTint="@null"
-                android:elevation="2dp" />
+                android:backgroundTint="@color/dark_brown"
+                android:elevation="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
 
+            <!-- Sign In Link with Ripple Effect -->
             <TextView
                 android:id="@+id/textView_signIn"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="wrap_content"
                 android:text="Already have an account? Sign In"
                 android:textColor="@color/dark_brown"
                 android:fontFamily="@font/cormorantgaramond"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:layout_gravity="center_horizontal"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="12dp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp" />
 
         </LinearLayout>
-</LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,87 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_pantry"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:id="@+id/activity_pantry"
-    android:background="@color/cream_dark"
-    android:padding="16dp">
+    android:background="@drawable/main_gradient_background"
+    tools:context=".PantryActivity">
 
+    <!-- Title -->
     <TextView
         android:id="@+id/textView_pantryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/dark_brown"
         android:text="Your Pantry"
+        android:textColor="@color/dark_brown"
         android:fontFamily="@font/cormorantgaramond"
-        android:textSize="30sp"
+        android:textSize="34sp"
         android:textStyle="bold"
-        android:layout_gravity="center" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="48dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_pantry"
-        android:layout_width="match_parent"
-        android:background="@drawable/content_background"
+    <!-- CardView Container with ScrollView -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/pantry_card"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_margin="24dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        android:backgroundTint="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/textView_pantryTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <AutoCompleteTextView
-        android:id="@+id/editText_ingredient"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="Enter ingredient"
-        android:inputType="text"
-        android:background="@drawable/input_background"
-        android:fontFamily="@font/cormorantgaramond"
-        android:textColor="@color/dark_brown"
-        android:textColorHint="@color/black"
-        android:textSize="20sp"/>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-    <!-- Add Spinner for units -->
-    <Spinner
-        android:id="@+id/spinner_unit"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@drawable/input_background"
-        android:textColor="@color/dark_brown"
-        android:spinnerMode="dropdown"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
 
-    <EditText
-        android:id="@+id/editText_quantity"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="Enter quantity"
-        android:inputType="number"
-        android:background="@drawable/input_background"
-        android:fontFamily="@font/cormorantgaramond"
-        android:textColor="@color/dark_brown"
-        android:textColorHint="@color/black"
-        android:textSize="20sp"/>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_pantry"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="@drawable/content_background"
+                    android:layout_marginBottom="16dp"/>
 
-    <Button
-        android:id="@+id/button_addIngredient"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/cream"
-        android:fontFamily="@font/cormorantgaramond"
-        android:background="@drawable/rounded_button"
-        app:backgroundTint="@null"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:text="Add Ingredient" />
+                <AutoCompleteTextView
+                    android:id="@+id/editText_ingredient"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Enter ingredient"
+                    android:inputType="text"
+                    android:background="@drawable/modern_input_background"
+                    android:fontFamily="@font/cormorantgaramond"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"
+                    android:padding="12dp"
+                    android:layout_marginBottom="12dp"/>
 
-    <Button
-        android:id="@+id/button_open_camera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/cream"
-        android:fontFamily="@font/cormorantgaramond"
-        android:background="@drawable/rounded_button"
-        app:backgroundTint="@null"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:text="Take Picture Of Ingredient"/>
+                <Spinner
+                    android:id="@+id/spinner_unit"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:background="@drawable/modern_input_background"
+                    android:padding="12dp"
+                    android:layout_marginBottom="12dp"/>
 
+                <EditText
+                    android:id="@+id/editText_quantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="Enter quantity"
+                    android:inputType="number"
+                    android:background="@drawable/modern_input_background"
+                    android:fontFamily="@font/cormorantgaramond"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"
+                    android:padding="12dp"
+                    android:layout_marginBottom="16dp"/>
 
-</LinearLayout>
+                <Button
+                    android:id="@+id/button_addIngredient"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:textStyle="bold"
+                    android:text="Add Ingredient"
+                    android:textColor="@color/cream"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/cormorantgaramond"
+                    android:backgroundTint="@color/dark_brown"
+                    android:elevation="4dp"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/button_open_camera"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:textStyle="bold"
+                    android:text="Take Picture Of Ingredient"
+                    android:textColor="@color/cream"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/cormorantgaramond"
+                    android:backgroundTint="@color/dark_brown"
+                    android:elevation="4dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp" />
+
+            </LinearLayout>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

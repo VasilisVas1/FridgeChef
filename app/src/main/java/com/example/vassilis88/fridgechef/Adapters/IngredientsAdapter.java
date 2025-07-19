@@ -4,16 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleCoroutineScope;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vassilis88.fridgechef.Models.ExtendedIngredient;
 import com.example.vassilis88.fridgechef.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -43,13 +40,26 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsViewHold
         return list.size();
     }
 
-    // Method to return the ingredients as a formatted string for HTML
     public String getIngredientsAsHtml() {
         StringBuilder html = new StringBuilder();
         for (ExtendedIngredient ingredient : list) {
             html.append("<li>").append(ingredient.original).append("</li>");
         }
         return html.toString();
+    }
+
+    public String getIngredientsAsText() {
+        StringBuilder ingredientsText = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            ExtendedIngredient ingredient = list.get(i);
+            if (i > 0) {
+                ingredientsText.append(", ");
+            }
+            if (ingredient.original != null && !ingredient.original.isEmpty()) {
+                ingredientsText.append(ingredient.original);
+            }
+        }
+        return ingredientsText.toString();
     }
 }
 

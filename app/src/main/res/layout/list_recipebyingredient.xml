@@ -1,63 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardBackgroundColor="@color/cream"
     android:id="@+id/recipesByIngredients_list_container"
-    app:cardElevation="8dp"
-    app:cardCornerRadius="16dp"
-    android:layout_margin="8dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="12dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/textView_titleRecipeByIngredient"
-            android:text="Dish Name"
-            android:fontFamily="@font/cormorantgaramond"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:textStyle="bold"
-            android:textColor="@color/dark_brown"
-            android:textSize="22sp"
-            android:padding="8dp"
+        android:orientation="vertical"
+        android:background="@drawable/welcome_card_gradient">
+
+        <!-- Header Section with Gradient Overlay -->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </TextView>
-        <ImageView
-            android:id="@+id/imageView_foodRecipeByIngredient"
-            android:scaleType="centerCrop"
-            android:layout_margin="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"/>
-        <TextView
-            android:id="@+id/textView_numberofMissedIngredients"
-            android:fontFamily="@font/cormorantgaramond"
-            android:text="Missed Ingredients"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:textStyle="bold"
-            android:textColor="@color/dark_brown"
-            android:textSize="22sp"
-            android:padding="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </TextView>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_missedIngredients"
-            android:layout_margin="4dp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_header_background"
+            android:padding="20dp">
+
+            <!-- Dish Title with Modern Typography -->
+            <TextView
+                android:id="@+id/textView_titleRecipeByIngredient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dish Name"
+                android:textSize="24sp"
+                android:textColor="@color/dark_brown"
+                android:fontFamily="@font/cormorantgaramond"
+                android:textStyle="bold"
+                android:letterSpacing="0.02"
+                android:lineSpacingExtra="2dp"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:scrollHorizontally="true"
+                android:shadowColor="#40000000"
+                android:shadowDx="0"
+                android:shadowDy="1"
+                android:shadowRadius="2" />
+
+        </RelativeLayout>
+
+        <!-- Content Container -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:paddingTop="16dp">
+
+            <!-- Modern Image Container -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp"
+                android:backgroundTint="@android:color/white">
+
+                <ImageView
+                    android:id="@+id/imageView_foodRecipeByIngredient"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/modern_input_background"
+                    android:foreground="@drawable/image_overlay_gradient" />
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Ingredients Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/ingredients_section_background"
+                android:padding="16dp"
+                android:layout_marginBottom="8dp">
+
+                <!-- Section Header with Icon -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+
+                    <TextView
+                        android:id="@+id/textView_numberofMissedIngredients"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Missed Ingredients"
+                        android:textSize="18sp"
+                        android:textColor="@color/dark_brown"
+                        android:fontFamily="@font/cormorantgaramond"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.01"
+                        android:alpha="0.9" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_missedIngredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:overScrollMode="always"
+                    android:nestedScrollingEnabled="true"
+                    android:clipToPadding="false"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:scrollbars="vertical"/>
+
+
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>

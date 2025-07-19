@@ -1,6 +1,5 @@
 import java.util.Properties
 
-// At the top of build.gradle.kts
 val localProperties = Properties().apply {
     val localPropertiesFile = rootProject.file("local.properties")
     if (localPropertiesFile.exists()) {
@@ -10,6 +9,7 @@ val localProperties = Properties().apply {
 val githubToken: String = localProperties.getProperty("github.token") ?: ""
 val logmealApiKey: String = localProperties.getProperty("logmeal.api.key") ?: ""
 val spoonacularApiKey: String = localProperties.getProperty("spoonacular.api.key") ?: ""
+val openRouterApiKey: String = localProperties.getProperty("openrouter.api.key")?: ""
 
 
 
@@ -23,7 +23,7 @@ android {
     namespace = "com.example.vassilis88.fridgechef"
     compileSdk = 34
     buildFeatures {
-        buildConfig = true  // Enable BuildConfig feature
+        buildConfig = true
     }
 
     defaultConfig {
@@ -35,6 +35,8 @@ android {
         buildConfigField("String", "GITHUB_TOKEN", "\"$githubToken\"")
         buildConfigField("String", "LOGMEAL_API_KEY", "\"$logmealApiKey\"")
         buildConfigField("String", "SPOONACULAR_API_KEY", "\"$spoonacularApiKey\"")
+        buildConfigField("String", "OPENROUTER_API_KEY", "\"$openRouterApiKey\"")
+
 
 
 

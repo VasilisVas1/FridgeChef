@@ -1,7 +1,7 @@
 # **FridgeChef - Smart Recipe Recommendation App**  
 
 
-## **📌 Overview**  
+## **Overview**  
 **FridgeChef** is an **Android-based recipe recommendation app** that helps users discover recipes based on the ingredients they already have at home. Designed to minimize food waste and simplify meal planning, the app leverages **AI-powered ingredient recognition, nutritional analysis, and personalized recipe suggestions** to enhance the cooking experience.  
 
 Built with **Java (Android Studio)** and integrated with **Firebase, Spoonacular API, and Large Language Models (LLMs)**, FridgeChef provides a seamless way to:  
@@ -12,7 +12,7 @@ Built with **Java (Android Studio)** and integrated with **Firebase, Spoonacular
 
 ---
 
-## **✨ Key Features**  
+## **Key Features**  
 
 ### **1. Smart Recipe Recommendations**  
 - **Recipe suggestions** based on pantry ingredients  
@@ -36,12 +36,12 @@ Built with **Java (Android Studio)** and integrated with **Firebase, Spoonacular
 - **Save favorites** to a personal **Cooking Book**  
 
 ### **5. User Statistics & Insights**  
-📊 **Top 10 most-used ingredients** across all users  
-📈 **Personal pantry health score** (Nutri-Score)  
+**Top 10 most-used ingredients** across all users  
+**Personal pantry health score** (Nutri-Score)  
 
 ---
 
-## **🛠️ Tech Stack**  
+## **Tech Stack**  
 
 | **Category**       | **Technologies Used** |  
 |--------------------|----------------------|  
@@ -53,14 +53,14 @@ Built with **Java (Android Studio)** and integrated with **Firebase, Spoonacular
 
 ---
 
-## **📲 How It Works**  
+## **How It Works**  
 
 ### **1. Sign Up / Log In**  
 - Secure authentication via **Firebase Auth**  
 
 ### **2. Set Up Your Pantry**  
-📸 **Option 1:** Scan ingredients with AI camera  
-⌨️ **Option 2:** Manually add ingredients with auto-suggest  
+**Option 1:** Scan ingredients with AI camera  
+**Option 2:** Manually add ingredients with auto-suggest  
 
 ### **3. Recommended Recipes**  
 - See **recommended recipes** based on your pantry  
@@ -78,18 +78,18 @@ Built with **Java (Android Studio)** and integrated with **Firebase, Spoonacular
 
 ---
 
-## **📚 Documentation & Thesis**  
+## **Documentation & Thesis**  
 For a **detailed technical breakdown**, including:  
 ✅ **System architecture**  
 ✅ **API integrations**  
 ✅ **AI implementation**  
 ✅ **User flow diagrams**  
 
-📄 **Read the full thesis:** [**Vasileiou_21010.pdf**](Vasileiou_21010.pdf)  
+**Read the full thesis:** [**Vasileiou_21010.pdf**](Vasileiou_21010.pdf)  
 
 ---
 
-## **🚀 Future Improvements**  
+## **Future Improvements**  
 🔹 **Multi-language support** (Greek & more)  
 🔹 **Smart shopping list generator**  
 🔹 **Recipe community & user posts**  
@@ -98,14 +98,14 @@ For a **detailed technical breakdown**, including:
 
 ---
 
-## **📜 License**  
+## **License**  
 This project is **academic work** developed as part of an undergraduate thesis at the **University of Piraeus**.  
 - **Educational use only**  
 - **No commercial redistribution** without permission  
 
 ---
 
-## **👨‍💻 Developer**  
+## **Developer**  
 **Vasileios Panagiotis Vasileiou**  
 📧 *Contact: [vasilisvasileiou33@gmail.com]*  
 🔗 *GitHub: [https://github.com/VasilisVas1]*  
